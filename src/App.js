@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
 import './App.css'
 import Formulaire from './components/Formulaire'
 import Message from './components/Message'
@@ -9,7 +9,8 @@ class App extends Component {
     messages: {},
     pseudo: this.props.match.params.pseudo
   }
-
+   
+  messagesRef = createRef()
   addMessage = message =>{
     const messages = { ... this.state.messages}
     messages[`message-${Date.now()}`] = message
@@ -22,6 +23,10 @@ class App extends Component {
       state:'messages'
     })
   }
+
+  componentDidUpdate(){
+    const ref = this.messagesRef.current
+  }
   render () {
     const messages = Object.keys(this.state.messages).map(key => (
       <Message
@@ -32,7 +37,7 @@ class App extends Component {
     return (
       <div className='box'>
         <div>
-          <div className='messages'>
+          <div className='messages' ref={this.messagesRef}>
             <div className='message'>
               {messages}
             </div>
