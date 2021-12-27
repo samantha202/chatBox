@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './App.css'
 import Formulaire from './components/Formulaire'
 import Message from './components/Message'
+import base from './base'
 
 class App extends Component {
   state = {
@@ -13,6 +14,13 @@ class App extends Component {
     const messages = { ... this.state.messages}
     messages[`message-${Date.now()}`] = message
     this.setState({messages})
+  }
+
+  componentDidMount(){
+    base.syncState('/',{
+      context: this,
+      state:'messages'
+    })
   }
   render () {
     const messages = Object.keys(this.state.messages).map(key => (
