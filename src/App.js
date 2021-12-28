@@ -1,8 +1,10 @@
 import React, { Component, createRef } from 'react'
 import './App.css'
+import './animation.css'
 import Formulaire from './components/Formulaire'
 import Message from './components/Message'
 import base from './base'
+import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
 class App extends Component {
   state = {
@@ -29,27 +31,30 @@ class App extends Component {
       state:'messages'
     })
   }
-  
-  isUser = pseudo => pseudo == this.state.pseudo
   componentDidUpdate(){
     const ref = this.messagesRef.current
     ref.scrollTop = ref.scrollHeight
   }
+  isUser = pseudo => pseudo === this.state.pseudo
   render () {
     const messages = Object.keys(this.state.messages).map(key => (
-      <Message
-       key={key}
-       isUser={ this.isUser}
-       message = {this.state.messages[key].message}
-       pseudo = {this.state.messages[key].pseudo}/>
+      <CSSTransition
+        timeout={2000}
+        classNames='fade'
+        key={key}>
+        <Message
+          isUser={ this.isUser}
+          message = {this.state.messages[key].message}
+          pseudo = {this.state.messages[key].pseudo}/>
+       </CSSTransition>
     ))
     return (
       <div className='box'>
         <div>
           <div className='messages' ref={this.messagesRef}>
-            <div className='message'>
+            <TransitionGroup className='message'>
               {messages}
-            </div>
+            </TransitionGroup>
           </div>
         </div>
         <Formulaire 
